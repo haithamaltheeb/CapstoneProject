@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StrumNation • Bass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="StrumNation home">
+        <span class="brand-logo" aria-hidden="true">🎸</span>
+        <span class="brand-name">StrumNation</span>
+      </a>
+      <form class="search" action="/search/" method="get" role="search" aria-label="Site search">
+        <input type="search" name="q" placeholder="Search instruments, brands, accessories…" aria-label="Search" />
+        <button type="submit" class="btn">Search</button>
+      </form>
+      <nav class="nav" aria-label="Primary">
+        <a href="login.html" class="nav-link">Login</a>
+        <a href="register.html" class="nav-link">Register</a>
+        <a href="/logout/" class="nav-link">Logout</a>
+        <a href="cart.html" class="nav-link">Cart</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Bass</h1>
+    <section class="grid-products" aria-label="Bass list">
+      <article class="product">
+        <div class="title">Fender Player Jazz Bass</div>
+        <div class="muted">Alnico V pickups</div>
+        <div class="price">$799</div>
+        <div class="actions">
+          <form action="/cart/add/" method="post">
+            <input type="hidden" name="sku" value="BAS-JBAS" />
+            <button class="btn btn-primary" type="submit">Add to Cart</button>
+          </form>
+        </div>
+      </article>
+      <article class="product">
+        <div class="title">Ibanez SR300E</div>
+        <div class="muted">PowerSpan Dual Coil</div>
+        <div class="price">$349</div>
+        <div class="actions">
+          <form action="/cart/add/" method="post">
+            <input type="hidden" name="sku" value="BAS-SR300" />
+            <button class="btn btn-primary" type="submit">Add to Cart</button>
+          </form>
+        </div>
+      </article>
+      <article class="product">
+        <div class="title">Squier Classic Vibe '60s P Bass</div>
+        <div class="muted">Vintage tone</div>
+        <div class="price">$459</div>
+        <div class="actions">
+          <form action="/cart/add/" method="post">
+            <input type="hidden" name="sku" value="BAS-PB60" />
+            <button class="btn btn-primary" type="submit">Add to Cart</button>
+          </form>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <section class="footer-section">
+        <h2 class="footer-heading">Contact us</h2>
+        <ul class="footer-list">
+          <li><a href="mailto:haitham.deeb8@gmail.com">haitham.deeb8@gmail.com</a></li>
+          <li><a href="tel:+962790010458">+962790010458</a></li>
+        </ul>
+      </section>
+      <section class="footer-brand">
+        <div class="copy">StrumNation ©</div>
+      </section>
+    </div>
+  </footer>
+</body>
+</html>
+
+
