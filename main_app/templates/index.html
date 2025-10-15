@@ -102,50 +102,69 @@
         </section>
 
         <!-- Categories Section -->
-        <section id="categories" class="categories">
-            <div class="container">
-                <h2 class="section-title">Shop by Category</h2>
-                <div class="categories-grid">
-                    <div class="category-card" data-category="guitar">
-                        <i class="fas fa-guitar"></i>
-                        <h3>Guitars</h3>
-                        <p>Acoustic, Electric & Bass Guitars</p>
-                    </div>
-                    <div class="category-card" data-category="drums">
-                        <i class="fas fa-drum"></i>
-                        <h3>Drums</h3>
-                        <p>Drum Sets & Percussion</p>
-                    </div>
-                    <div class="category-card" data-category="piano">
-                        <i class="fas fa-piano-keyboard"></i>
-                        <h3>Pianos</h3>
-                        <p>Digital & Acoustic Pianos</p>
-                    </div>
-                    <div class="category-card" data-category="strings">
-                        <i class="fas fa-violin"></i>
-                        <h3>Strings</h3>
-                        <p>Violins, Cellos & More</p>
-                    </div>
-                    <div class="category-card" data-category="bass">
-                        <i class="fas fa-music"></i>
-                        <h3>Bass</h3>
-                        <p>Bass Guitars & Equipment</p>
-                    </div>
-                    <div class="category-card" data-category="amplifier">
-                        <i class="fas fa-volume-up"></i>
-                        <h3>Amplifiers</h3>
-                        <p>Guitar & Bass Amplifiers</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
+        <!-- Categories Section -->
+<section id="categories" class="categories">
+    <div class="container">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="categories-grid">
+            <a href="{% url 'category_products' 'guitar' %}" class="category-card">
+                <i class="fas fa-guitar"></i>
+                <h3>Guitars</h3>
+                <p>Acoustic, Electric & Bass Guitars</p>
+            </a>
+            <a href="{% url 'category_products' 'drums' %}" class="category-card">
+                <i class="fas fa-drum"></i>
+                <h3>Drums</h3>
+                <p>Drum Sets & Percussion</p>
+            </a>
+            <a href="{% url 'category_products' 'piano' %}" class="category-card">
+                <i class="fas fa-piano-keyboard"></i>
+                <h3>Pianos</h3>
+                <p>Digital & Acoustic Pianos</p>
+            </a>
+            <a href="{% url 'category_products' 'strings' %}" class="category-card">
+                <i class="fas fa-violin"></i>
+                <h3>Strings</h3>
+                <p>Violins, Cellos & More</p>
+            </a>
+            <a href="{% url 'category_products' 'bass' %}" class="category-card">
+                <i class="fas fa-music"></i>
+                <h3>Bass</h3>
+                <p>Bass Guitars & Equipment</p>
+            </a>
+            <a href="{% url 'category_products' 'amplifier' %}" class="category-card">
+                <i class="fas fa-volume-up"></i>
+                <h3>Amplifiers</h3>
+                <p>Guitar & Bass Amplifiers</p>
+            </a>
+        </div>
+    </div>
+</section>
+
 
         <!-- Products Section -->
         <section class="products">
             <div class="container">
                 <h2 class="section-title">Featured Products</h2>
                 <div class="products-grid" id="productsGrid">
-                    <!-- Products will be dynamically loaded here -->
+                    <div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+        {% else %}
+        <div class="product-image">{{ product.name|slice:":1" }}</div>
+        {% endif %}
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-price">${{ product.price }}</p>
+        <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    {% empty %}
+    <p>No products available.</p>
+    {% endfor %}
+</div>
+
                 </div>
             </div>
         </section>

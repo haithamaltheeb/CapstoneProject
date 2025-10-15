@@ -1,48 +1,58 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import ProductForm
+from .models import Product 
 
-# Create your views here.
-
-# main_app/views.py
-
-
-
-# Import HttpResponse to send text-based responses
-from django.http import HttpResponse
-
-# Define the home view function
+@login_required
 def home(request):
-    # Send a simple HTML response
-    return render(request, 'index.html')
+    form = None
+    if request.user.is_superuser:
+        # إذا كان المستخدم Admin، جهز Form
+        if request.method == 'POST':
+            form = ProductForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('home')  # يعيد تحميل الصفحة
+        else:
+            form = ProductForm()
+    
+    # جلب كل المنتجات من قاعدة البيانات
+    products = Product.objects.all()
+    
+    # تمرير المنتجات إلى القالب
+    return render(request, 'index.html', {'form': form, 'products': products})
 
-
+@login_required
 def about(request):
-    # Send a simple HTML response
-    return HttpResponse('<h1>Hello ᓚᘏᗢ</h1>')
+    return render(request, 'about.html')
 
-"""
-def index(request):
-    return render(request, 'index.html')
+@login_required
+def add_product(request):
+    if not request.user.is_superuser:
+        return redirect('home')
 
-"""
-"""
-def guitars_html(request):
-    return render(request, "guitars/guitars.html", {'guitars' :guitars})
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = ProductForm()
+    
+    return render(request, 'add_product.html', {'form': form})
 
-class Guitar:
-    def __init__(self, type, description, price):
-        self.type = type
-        self.description = description
-        self.price = price
+def category_products(request, category_name):
+    products = Product.objects.filter(category__name__iexact=category_name)
+    return render(request, 'category_products.html', {
+        'products': products,
+        'category_name': category_name.capitalize()
+    })
 
-        #creating list of guitars instances
-
-        guitars = [
-            Guitar('ibanez','large nick 22 frits etc',155),
-            Guitar('Yamaha','large ndfge frits etc',1455),
-            Guitar('Dean','largfghrhdts etc',15215),
-            Guitar('Fender','larg77rehkfhs etc',15175)
-        ]
-        """
-
-def category_guitars(request):
-    return render(request, 'index.html')
+def category_products(request, category_name):
+    # جلب المنتجات حسب الفئة
+    products = Product.objects.filter(category__iexact=category_name)
+    context = {
+        'products': products,
+        'category_name': category_name.title()  # Capitalize first letter
+    }
+    return render(request, 'category_products.html', context)

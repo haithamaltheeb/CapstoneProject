@@ -41,6 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+#added
+
+STATICFILES_DIRS = [
+    BASE_DIR / "main_app" / "static",
+]
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

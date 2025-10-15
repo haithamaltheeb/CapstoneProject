@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ category_name }} - StrumNation</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <h1><i class="fas fa-music"></i> StrumNation</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="products">
+            <div class="container">
+                <h2 class="section-title">{{ category_name }}</h2>
+                <div class="products-grid">
+                    {% for product in products %}
+                    <div class="product-card">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                        {% else %}
+                        <div class="product-image">{{ product.name|slice:":1" }}</div>
+                        {% endif %}
+                        <h3 class="product-name">{{ product.name }}</h3>
+                        <p class="product-price">${{ product.price }}</p>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                    {% empty %}
+                    <p>No products available in this category.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
