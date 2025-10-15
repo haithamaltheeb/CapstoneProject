@@ -2,41 +2,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{{ category_name }} - StrumNation</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ category_name }} - StrumNation</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="nav-brand">
-                <h1><i class="fas fa-music"></i> StrumNation</h1>
-            </div>
-        </div>
-    </header>
+  <header class="header">
+    <div class="container">
+      <div class="nav-brand">
+        <h1><i class="fas fa-music"></i> StrumNation</h1>
+      </div>
+      
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form method="GET" action="{% url 'search' %}" id="searchForm">
+          <input type="text" name="q" class="search-input" placeholder="Search instruments..." id="searchInput">
+          <button type="submit" class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+        <div class="search-results" id="searchResults" style="display: none;"></div>
+      </div>
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="nav" id="nav">
+        <ul class="nav-list">
+          <li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'view_cart' %}" class="nav-link">Cart <span class="cart-count" id="cartCount">0</span></a></li>
+            <li><a href="{% url 'logout' %}" class="logout-btn">Logout</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}" class="login-btn">Login</a></li>
+            <li><a href="{% url 'register' %}" class="login-btn">Register</a></li>
+          {% endif %}
+          {% if user.is_superuser %}
+            <li><a href="{% url 'add_product' %}" class="nav-link">Admin: Add Product</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <main class="main">
-        <section class="products">
-            <div class="container">
-                <h2 class="section-title">{{ category_name }}</h2>
-                <div class="products-grid">
-                    {% for product in products %}
-                    <div class="product-card">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
-                        {% else %}
-                        <div class="product-image">{{ product.name|slice:":1" }}</div>
-                        {% endif %}
-                        <h3 class="product-name">{{ product.name }}</h3>
-                        <p class="product-price">${{ product.price }}</p>
-                        <button class="add-to-cart-btn">Add to Cart</button>
-                    </div>
-                    {% empty %}
-                    <p>No products available in this category.</p>
-                    {% endfor %}
-                </div>
+  <main class="main">
+    <section class="products">
+      <div class="container">
+        <h2 class="section-title">{{ category_name }}</h2>
+        {% if search_query %}
+          <p class="search-info">Search results for: <strong>{{ search_query }}</strong></p>
+        {% endif %}
+        <div class="products-grid">
+          {% for product in products %}
+            <div class="product-card">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
+              {% else %}
+                <div class="product-image">{{ product.name|slice:":1" }}</div>
+              {% endif %}
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+              <p class="product-price">${{ product.price }}</p>
+              {% if user.is_authenticated %}
+                <a class="add-to-cart-btn" href="{% url 'add_to_cart' product.id %}">Add to Cart</a>
+              {% else %}
+                <a class="add-to-cart-btn" href="{% url 'login' %}">Login to Buy</a>
+              {% endif %}
             </div>
-        </section>
-    </main>
+          {% empty %}
+            <div class="no-products">
+              <i class="fas fa-search"></i>
+              <h3>No products found</h3>
+              <p>Try searching for something else or browse our categories.</p>
+              <a href="{% url 'home' %}" class="cta-btn">Browse Categories</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3><i class="fas fa-music"></i> StrumNation</h3>
+          <p>Your ultimate destination for premium musical instruments. We provide the finest guitars, drums, pianos, and more to musicians worldwide.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'category_products' 'Guitars' %}">Guitars</a></li>
+            <li><a href="{% url 'category_products' 'Drums' %}">Drums</a></li>
+            <li><a href="{% url 'category_products' 'Pianos' %}">Pianos</a></li>
+            <li><a href="{% url 'category_products' 'Strings' %}">Strings</a></li>
+            <li><a href="{% url 'category_products' 'Amplifiers' %}">Amplifiers</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Contact Info</h4>
+          <div class="contact-info">
+            <p><i class="fas fa-envelope"></i> Haitham.deeb8@gmail.com</p>
+            <p><i class="fas fa-phone"></i> +962790010458</p>
+            <p><i class="fas fa-map-marker-alt"></i> Jordan</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 StrumNation. All rights reserved. | Powered by <strong>Haitham AlTheeb</strong></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Menu Toggle
+    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+      const nav = document.getElementById('nav');
+      nav.classList.toggle('active');
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    let searchTimeout;
+
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      
+      clearTimeout(searchTimeout);
+      
+      if (query.length < 2) {
+        searchResults.style.display = 'none';
+        return;
+      }
+
+      searchTimeout = setTimeout(() => {
+        fetch(`/search/?q=${encodeURIComponent(query)}&ajax=1`)
+          .then(response => response.json())
+          .then(data => {
+            displaySearchResults(data.results);
+          })
+          .catch(error => {
+            console.error('Search error:', error);
+          });
+      }, 300);
+    });
+
+    function displaySearchResults(results) {
+      if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-result-item">No products found</div>';
+      } else {
+        searchResults.innerHTML = results.map(product => `
+          <div class="search-result-item" onclick="window.location.href='/category/${product.category}/'">
+            <div class="search-result-image">
+              ${product.name.charAt(0)}
+            </div>
+            <div class="search-result-details">
+              <h4>${product.name}</h4>
+              <p>$${product.price}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+      searchResults.style.display = 'block';
+    }
+
+    // Hide search results when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('.search-container')) {
+        searchResults.style.display = 'none';
+      }
+    });
+
+    // Update cart count
+    {% if user.is_authenticated %}
+      fetch('/cart/count/')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('cartCount').textContent = data.count;
+        })
+        .catch(error => console.error('Cart count error:', error));
+    {% endif %}
+  </script>
 </body>
 </html>

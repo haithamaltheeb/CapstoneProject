@@ -41,11 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-#added
 
-STATICFILES_DIRS = [
-    BASE_DIR / "main_app" / "static",
-]
 
 
 MIDDLEWARE = [
@@ -132,7 +128,24 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+#added
+
+STATICFILES_DIRS = [ BASE_DIR / 'main_app' / 'static' ]
+
+
+
+# ملفات الوسائط (صور المنتجات)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Custom User Model
+# AUTH_USER_MODEL = 'main_app.CustomUser'
